@@ -1,8 +1,8 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/auth/user.entity';
 import { CreateListingDto } from './dto/create-listing.dto';
-import { GetListingsFilterDto } from './dto/get-listings-filter.dto';
 import { Listing } from './listing.entity';
 import { ListingRepository } from './listing.repository';
 
@@ -14,22 +14,19 @@ export class ListingsService {
     private readonly configService: ConfigService,
   ) {}
 
-  async getAllListings(filterDto: GetListingsFilterDto) {
-    return await this.listingRepository.getAllListings(filterDto);
+  async getAllListings(user: User) {
+    return await this.listingRepository.getAllListings(user);
   }
 
-  async createListing(createListingDto: CreateListingDto, image: any) {
-    try {
-      const listing = this.listingRepository.create({
-        ...createListingDto,
-        image: image ? image.filename : null,
-      });
-      await listing.save();
-
-      return listing;
-    } catch (error) {
-      console.log(error);
-      throw new InternalServerErrorException();
-    }
+  async createListing(
+    createListingDto: CreateListingDto,
+    images: any[],
+    user: User,
+  ) {
+    return await this.listingRepository.createListing(
+      createListingDto,
+      images,
+      user,
+    );
   }
 }

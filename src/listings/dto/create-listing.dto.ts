@@ -10,10 +10,6 @@ export class CreateListingDto {
   description: string;
 
   @IsNotEmpty()
-  @IsNumberString()
-  guestPoint: number;
-
-  @IsNotEmpty()
   homeType: ListingHomeType;
 
   @IsNotEmpty()

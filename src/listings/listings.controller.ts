@@ -1,47 +1,51 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Get,
   Post,
   Query,
-  UploadedFile,
+  UploadedFiles,
+  UseGuards,
   UseInterceptors,
   ValidationPipe,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { CreateListingDto } from './dto/create-listing.dto';
 import { ListingsService } from './listings.service';
 import { diskStorage } from 'multer';
 import { editFileName } from 'src/helpers/edit-filename.helper';
-import { GetListingsFilterDto } from './dto/get-listings-filter.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from 'src/auth/get-user.decorator';
+import { User } from 'src/auth/user.entity';
 
 @Controller('listings')
+@UseGuards(AuthGuard())
 export class ListingsController {
   constructor(private listingsService: ListingsService) {}
 
   @Get()
-  async getAllListings(@Query(ValidationPipe) filterDto: GetListingsFilterDto) {
-    return await this.listingsService.getAllListings(filterDto);
+  async getAllListings(@GetUser() user: User) {
+    return await this.listingsService.getAllListings(user);
   }
 
   @Post()
   @UseInterceptors(
-    FileInterceptor('image', {
+    AnyFilesInterceptor({
       storage: diskStorage({
-        destination: './uploads',
+        // destination: './uploads',
         filename: editFileName,
       }),
     }),
   )
   async createListing(
     @Body(ValidationPipe) createListingDto: CreateListingDto,
-    @UploadedFile() image: any,
+    @UploadedFiles() images: any[],
+    @GetUser() user: User,
   ) {
-    if (!image) {
-      throw new BadRequestException(['image photo is required'], 'Bad Request');
-    }
-
-    return await this.listingsService.createListing(createListingDto, image);
+    return await this.listingsService.createListing(
+      createListingDto,
+      images,
+      user,
+    );
   }
 }

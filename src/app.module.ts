@@ -12,6 +12,8 @@ import { DestinationsModule } from './destinations/destinations.module';
 import { ConfigModule } from '@nestjs/config';
 import { ListingsModule } from './listings/listings.module';
 import { AvailabilitiesModule } from './availabilities/availabilities.module';
+import { AuthModule } from './auth/auth.module';
+import { SearchModule } from './search/search.module';
 import configuration from './config/configuration';
 
 @Module({
@@ -33,6 +35,8 @@ import configuration from './config/configuration';
     DestinationsModule,
     ListingsModule,
     AvailabilitiesModule,
+    AuthModule,
+    SearchModule,
   ],
   controllers: [AppController],
   providers: [AppService],

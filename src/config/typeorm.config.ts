@@ -9,6 +9,4 @@ export class TypeOrmConfig implements TypeOrmOptionsFactory {
   createTypeOrmOptions() {
     return this.configService.get('database');
   }
-
-  
 }

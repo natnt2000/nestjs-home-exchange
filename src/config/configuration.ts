@@ -10,4 +10,12 @@ export default () => ({
     synchronize: true,
     // logging: true,
   },
+  jwt: {
+    accessToken: {
+      secret: process.env.ACCESS_TOKEN_SECRET_KEY,
+      signOptions: {
+        expiresIn: process.env.ACCESS_TOKEN_LIFE,
+      },
+    },
+  },
 });

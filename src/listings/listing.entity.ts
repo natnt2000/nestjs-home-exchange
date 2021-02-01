@@ -1,3 +1,4 @@
+import { User } from 'src/auth/user.entity';
 import { Availability } from 'src/availabilities/availability.entity';
 import { Destination } from 'src/destinations/destination.entity';
 import { Feature } from 'src/features/feature.entity';
@@ -26,8 +27,8 @@ export class Listing extends BaseEntity {
   @Column()
   description: string;
 
-  @Column()
-  guestPoint: number;
+  @Column({ default: 0 })
+  guestPoints: number;
 
   @Column()
   homeType: ListingHomeType;
@@ -41,8 +42,8 @@ export class Listing extends BaseEntity {
   @Column()
   longitude: string;
 
-  @Column()
-  image: string;
+  @Column({ nullable: true, type: 'simple-array' })
+  images: string[];
 
   @Column()
   surfaceArea: number;
@@ -69,4 +70,10 @@ export class Listing extends BaseEntity {
 
   @OneToMany(() => Availability, (availability) => availability.listing)
   availabilities: Availability[];
+
+  @ManyToOne(() => User, (user) => user.listings)
+  owner: User;
+
+  @Column()
+  ownerId: number;
 }
