@@ -1,24 +1,25 @@
-import { IsIn, IsNumberString, IsOptional } from 'class-validator';
-import { ListingHomeType } from '../enums/listing-home-type.enum';
-import { ListingResidenceType } from '../enums/listing-residence-type.enum';
+import { IsIn, IsNotEmpty, IsNumberString, IsOptional } from 'class-validator';
 
-export class GetListingsFilterDto {
+export class ListingFilterDto {
   @IsOptional()
+  @IsNotEmpty()
   features: string[];
 
   @IsOptional()
+  @IsNotEmpty()
   rules: string[];
 
   @IsOptional()
+  @IsNotEmpty()
   groups: string[];
 
   @IsOptional()
-  @IsIn([ListingHomeType.DEPARTMENT, ListingHomeType.HOUSE])
-  homeType: ListingHomeType;
+  @IsNotEmpty()
+  homeType: string;
 
   @IsOptional()
-  @IsIn([ListingResidenceType.PRIMARY, ListingResidenceType.SECONDARY])
-  residenceType: ListingResidenceType;
+  @IsNotEmpty()
+  residenceType: string;
 
   @IsOptional()
   @IsNumberString()

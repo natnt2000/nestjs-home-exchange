@@ -1,6 +1,4 @@
 import { IsNotEmpty, IsNumberString } from 'class-validator';
-import { ListingHomeType } from '../enums/listing-home-type.enum';
-import { ListingResidenceType } from '../enums/listing-residence-type.enum';
 
 export class CreateListingDto {
   @IsNotEmpty()
@@ -10,10 +8,10 @@ export class CreateListingDto {
   description: string;
 
   @IsNotEmpty()
-  homeType: ListingHomeType;
+  homeType: string;
 
   @IsNotEmpty()
-  residenceType: ListingResidenceType;
+  residenceType: string;
 
   @IsNotEmpty()
   latitude: string;

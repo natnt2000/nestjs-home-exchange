@@ -13,8 +13,6 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { ListingHomeType } from './enums/listing-home-type.enum';
-import { ListingResidenceType } from './enums/listing-residence-type.enum';
 
 @Entity()
 export class Listing extends BaseEntity {
@@ -31,10 +29,10 @@ export class Listing extends BaseEntity {
   guestPoints: number;
 
   @Column()
-  homeType: ListingHomeType;
+  homeType: string;
 
   @Column()
-  residenceType: ListingResidenceType;
+  residenceType: string;
 
   @Column()
   latitude: string;

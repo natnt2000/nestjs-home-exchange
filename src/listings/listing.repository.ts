@@ -2,12 +2,15 @@ import { InternalServerErrorException } from '@nestjs/common';
 import { User } from 'src/auth/user.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { CreateListingDto } from './dto/create-listing.dto';
-import { GetListingsFilterDto } from './dto/get-listings-filter.dto';
+import { ListingFilterDto } from './dto/get-listings-filter.dto';
 import { Listing } from './listing.entity';
 
 @EntityRepository(Listing)
 export class ListingRepository extends Repository<Listing> {
-  async filter(filterDto: GetListingsFilterDto) {
+  async searchWithFilter(
+    destination: string,
+    listingFilterDto: ListingFilterDto,
+  ) {
     try {
       const {
         guestpoints_from,
@@ -19,8 +22,17 @@ export class ListingRepository extends Repository<Listing> {
         rules,
         bedrooms,
         bathrooms,
-      } = filterDto;
+      } = listingFilterDto;
       const query = this.createQueryBuilder('listing');
+
+      if (destination && destination !== 'everywhere') {
+        query
+          .leftJoinAndSelect('listing.destination', 'destination')
+          .andWhere(
+            "UPPER(:destination) LIKE UPPER(CONCAT('%', destination.city, '%')) OR UPPER(:destination) LIKE UPPER(CONCAT('%', destination.country, '%'))",
+            { destination },
+          );
+      }
 
       if (homeType) {
         query.andWhere('"homeType" = :homeType', { homeType });
@@ -54,7 +66,7 @@ export class ListingRepository extends Repository<Listing> {
         query
           .leftJoinAndSelect('listing.features', 'feature')
           .andWhere('feature.id IN (:...features)', {
-            features: Array.isArray(features) ? features : [features],
+            features,
           });
       }
 
@@ -62,7 +74,7 @@ export class ListingRepository extends Repository<Listing> {
         query
           .leftJoinAndSelect('listing.rules', 'rule')
           .andWhere('rule.id IN (:...rules)', {
-            rules: Array.isArray(rules) ? rules : [rules],
+            rules,
           });
       }
 
