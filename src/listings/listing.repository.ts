@@ -29,7 +29,7 @@ export class ListingRepository extends Repository<Listing> {
         query
           .leftJoinAndSelect('listing.destination', 'destination')
           .andWhere(
-            "UPPER(:destination) LIKE UPPER(CONCAT('%', destination.city, '%')) OR UPPER(:destination) LIKE UPPER(CONCAT('%', destination.country, '%'))",
+            "(UPPER(:destination) LIKE UPPER(CONCAT('%', destination.city, '%')) OR UPPER(:destination) LIKE UPPER(CONCAT('%', destination.country, '%')))",
             { destination },
           );
       }

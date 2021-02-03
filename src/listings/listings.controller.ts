@@ -3,7 +3,6 @@ import {
   Controller,
   Get,
   Post,
-  Query,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -17,18 +16,23 @@ import { editFileName } from 'src/helpers/edit-filename.helper';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/auth/get-user.decorator';
 import { User } from 'src/auth/user.entity';
+import { ApiBearerAuth, ApiOperation, ApiOkResponse } from '@nestjs/swagger';
 
-@Controller('listings')
 @UseGuards(AuthGuard())
+@Controller('listings')
+@ApiBearerAuth()
 export class ListingsController {
   constructor(private listingsService: ListingsService) {}
 
   @Get()
+  @ApiOperation({ summary: 'Get all user listings' })
+  @ApiOkResponse({ type: Object, isArray: true })
   async getAllListings(@GetUser() user: User) {
     return await this.listingsService.getAllListings(user);
   }
 
   @Post()
+  @ApiOperation({ summary: 'Create listing' })
   @UseInterceptors(
     AnyFilesInterceptor({
       storage: diskStorage({
