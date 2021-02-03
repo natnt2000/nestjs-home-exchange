@@ -1,8 +1,8 @@
-import { User } from 'src/auth/user.entity';
-import { Availability } from 'src/availabilities/availability.entity';
-import { Destination } from 'src/destinations/destination.entity';
-import { Feature } from 'src/features/feature.entity';
-import { Rule } from 'src/rules/rule.entity';
+import { User } from '../auth/user.entity';
+import { Availability } from '../availabilities/availability.entity';
+import { Destination } from '../destinations/destination.entity';
+import { Feature } from '../features/feature.entity';
+import { Rule } from '../rules/rule.entity';
 import {
   BaseEntity,
   Column,

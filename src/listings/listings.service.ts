@@ -1,7 +1,6 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/auth/user.entity';
+import { User } from '../auth/user.entity';
 import { CreateListingDto } from './dto/create-listing.dto';
 import { Listing } from './listing.entity';
 import { ListingRepository } from './listing.repository';
@@ -11,7 +10,6 @@ export class ListingsService {
   constructor(
     @InjectRepository(Listing)
     private listingRepository: ListingRepository,
-    private readonly configService: ConfigService,
   ) {}
 
   async getAllListings(user: User) {

@@ -1,4 +1,4 @@
-import { Listing } from 'src/listings/listing.entity';
+import { Listing } from '../listings/listing.entity';
 import {
   BaseEntity,
   Column,

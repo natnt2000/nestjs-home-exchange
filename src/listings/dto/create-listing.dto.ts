@@ -29,15 +29,20 @@ export class CreateListingDto {
   @ApiProperty({ type: Number, description: 'SurfaceArea' })
   @IsNotEmpty()
   @IsNumberString()
-  surfaceArea: number;
+  surfaceArea: string;
 
   @ApiProperty({ type: Number, description: 'Bedrooms' })
   @IsNotEmpty()
   @IsNumberString()
-  bedrooms: number;
+  bedrooms: string;
 
   @ApiProperty({ type: Number, description: 'Bathrooms' })
   @IsNotEmpty()
   @IsNumberString()
-  bathrooms: number;
+  bathrooms: string;
+
+  @ApiProperty({ type: Number, description: 'Destination Id' })
+  @IsNotEmpty()
+  @IsNumberString()
+  destinationId: string;
 }

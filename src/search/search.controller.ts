@@ -1,5 +1,5 @@
 import { Controller, Get, Param, Query, ValidationPipe } from '@nestjs/common';
-import { ListingFilterDto } from 'src/listings/dto/get-listings-filter.dto';
+import { ListingFilterDto } from '../listings/dto/get-listings-filter.dto';
 import { SearchService } from './search.service';
 import { ApiOperation, ApiOkResponse, ApiParam } from '@nestjs/swagger';
 

@@ -1,4 +1,4 @@
-import { Body, Controller, Post, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Post, Res, ValidationPipe } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { AuthSignInDto } from './dto/auth-signin.dto';
@@ -17,7 +17,8 @@ export class AuthController {
   @Post('/sign-in')
   @ApiOperation({ summary: 'Sign In' })
   @ApiOkResponse({ type: String })
-  async signIn(@Body(ValidationPipe) authSignInDto: AuthSignInDto) {
-    return await this.authService.signIn(authSignInDto);
+  async signIn(@Body(ValidationPipe) authSignInDto: AuthSignInDto, @Res() res) {
+    const accessToken = await this.authService.signIn(authSignInDto);
+    return res.status(200).json(accessToken);
   }
 }

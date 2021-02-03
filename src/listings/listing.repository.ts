@@ -1,5 +1,5 @@
 import { InternalServerErrorException } from '@nestjs/common';
-import { User } from 'src/auth/user.entity';
+import { User } from '../auth/user.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { CreateListingDto } from './dto/create-listing.dto';
 import { ListingFilterDto } from './dto/get-listings-filter.dto';
@@ -105,8 +105,21 @@ export class ListingRepository extends Repository<Listing> {
     user: User,
   ) {
     try {
-      const listing = this.create(createListingDto);
-      listing.ownerId = user.id;
+      const {
+        surfaceArea,
+        bathrooms,
+        bedrooms,
+        destinationId,
+      } = createListingDto;
+
+      const listing = this.create({
+        ...createListingDto,
+        surfaceArea: parseInt(surfaceArea),
+        bathrooms: parseInt(bathrooms),
+        bedrooms: parseInt(bedrooms),
+        destinationId: parseInt(destinationId),
+        ownerId: user.id,
+      });
 
       if (images && images.length > 0) {
         const imagesUrls = images.map((val) => val.filename);

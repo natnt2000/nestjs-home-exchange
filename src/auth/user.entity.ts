@@ -1,7 +1,7 @@
 import { compare } from 'bcrypt';
-import { Group } from 'src/groups/group.entity';
-import { Language } from 'src/languages/language.entity';
-import { Listing } from 'src/listings/listing.entity';
+import { Group } from '../groups/group.entity';
+import { Language } from '../languages/language.entity';
+import { Listing } from '../listings/listing.entity';
 import {
   BaseEntity,
   Column,

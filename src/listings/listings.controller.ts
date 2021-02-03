@@ -12,10 +12,10 @@ import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { CreateListingDto } from './dto/create-listing.dto';
 import { ListingsService } from './listings.service';
 import { diskStorage } from 'multer';
-import { editFileName } from 'src/helpers/edit-filename.helper';
+import { editFileName } from '../helpers/edit-filename.helper';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from 'src/auth/get-user.decorator';
-import { User } from 'src/auth/user.entity';
+import { GetUser } from '../auth/get-user.decorator';
+import { User } from '../auth/user.entity';
 import { ApiBearerAuth, ApiOperation, ApiOkResponse } from '@nestjs/swagger';
 
 @UseGuards(AuthGuard())
