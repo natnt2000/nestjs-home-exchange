@@ -13,9 +13,11 @@ import { AvailabilitiesModule } from './availabilities/availabilities.module';
 import { AuthModule } from './auth/auth.module';
 import { SearchModule } from './search/search.module';
 import { typeOrmConfig } from './config/typeorm.config';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ envFilePath: '.env.dev' }),
     TypeOrmModule.forRoot(typeOrmConfig),
     LanguagesModule,
     GroupsModule,

@@ -81,7 +81,6 @@ export class ListingRepository extends Repository<Listing> {
       const listings = await query.getMany();
       return listings;
     } catch (error) {
-      console.log(error);
       throw new InternalServerErrorException();
     }
   }
@@ -94,7 +93,6 @@ export class ListingRepository extends Repository<Listing> {
       });
       return listings;
     } catch (error) {
-      console.log(error);
       throw new InternalServerErrorException();
     }
   }
@@ -129,7 +127,6 @@ export class ListingRepository extends Repository<Listing> {
       await listing.save();
       return listing;
     } catch (error) {
-      console.log(error);
       throw new InternalServerErrorException();
     }
   }

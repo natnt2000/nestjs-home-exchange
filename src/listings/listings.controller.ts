@@ -28,7 +28,7 @@ export class ListingsController {
   @ApiOperation({ summary: 'Get all user listings' })
   @ApiOkResponse({ type: Object, isArray: true })
   async getAllListings(@GetUser() user: User) {
-    return await this.listingsService.getAllListings(user);
+    return this.listingsService.getAllListings(user);
   }
 
   @Post()
@@ -46,10 +46,6 @@ export class ListingsController {
     @UploadedFiles() images: any[],
     @GetUser() user: User,
   ) {
-    return await this.listingsService.createListing(
-      createListingDto,
-      images,
-      user,
-    );
+    return this.listingsService.createListing(createListingDto, images, user);
   }
 }

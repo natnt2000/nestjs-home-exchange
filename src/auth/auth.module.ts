@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -9,11 +10,12 @@ import { UserRepository } from './user.repository';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ envFilePath: '.env.dev' }),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
-      secret: 'access_token',
+      secret: process.env.ACCESS_TOKEN_SECRET_KEY,
       signOptions: {
-        expiresIn: '1h',
+        expiresIn: process.env.ACCESS_TOKEN_LIFE,
       },
     }),
     TypeOrmModule.forFeature([UserRepository]),

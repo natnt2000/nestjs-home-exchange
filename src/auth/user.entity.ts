@@ -1,9 +1,10 @@
-import { compare } from 'bcrypt';
+import { compare, genSalt, hash } from 'bcrypt';
 import { Group } from '../groups/group.entity';
 import { Language } from '../languages/language.entity';
 import { Listing } from '../listings/listing.entity';
 import {
   BaseEntity,
+  BeforeInsert,
   Column,
   Entity,
   JoinTable,
@@ -12,6 +13,7 @@ import {
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
+import { InternalServerErrorException } from '@nestjs/common';
 
 @Entity()
 @Unique(['email'])
@@ -69,5 +71,15 @@ export class User extends BaseEntity {
 
   async comparePassword(expectedPassword: string) {
     return await compare(expectedPassword, this.password);
+  }
+
+  @BeforeInsert()
+  async hashPassword() {
+    try {
+      const salt = await genSalt(10);
+      this.password = await hash(this.password, salt);
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
   }
 }

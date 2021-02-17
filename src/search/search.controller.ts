@@ -23,9 +23,6 @@ export class SearchController {
     @Param('destination')
     destination: string,
   ) {
-    return await this.searchService.searchWithFilter(
-      destination,
-      listingFilterDto,
-    );
+    return this.searchService.searchWithFilter(destination, listingFilterDto);
   }
 }

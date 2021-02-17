@@ -1,4 +1,9 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
@@ -6,6 +11,7 @@ import { AuthSignInDto } from './dto/auth-signin.dto';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { User } from './user.entity';
 import { UserRepository } from './user.repository';
+import { AuthErrorCode } from './auth.constants';
 
 @Injectable()
 export class AuthService {
@@ -14,7 +20,16 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
   async signUp(authCredentialsDto: AuthCredentialsDto) {
-    return await this.userRepository.signUp(authCredentialsDto);
+    try {
+      const user = this.userRepository.create(authCredentialsDto);
+      await user.save();
+      return user;
+    } catch (error) {
+      if (error.code === '23505') {
+        throw new ConflictException(error.detail);
+      }
+      throw new InternalServerErrorException();
+    }
   }
 
   async signIn(authSignInDto: AuthSignInDto) {
@@ -23,18 +38,28 @@ export class AuthService {
     const user = await this.userRepository.findOne({ where: { email } });
 
     if (!user) {
-      throw new UnauthorizedException(`Email does not exist`);
+      throw new UnauthorizedException(AuthErrorCode.EMAIL_DOES_NOT_EXIST);
     }
 
     const isMatched = await user.comparePassword(password);
 
     if (!isMatched) {
-      throw new UnauthorizedException(`Password is incorrect`);
+      throw new UnauthorizedException(AuthErrorCode.PASSWORD_IS_INCORRECT);
     }
 
     const payload: JwtPayload = { email };
     const accessToken = this.jwtService.sign(payload);
 
     return { accessToken };
+  }
+
+  async findOneByEmail(email: string) {
+    const user = await this.userRepository.findOne({ email });
+
+    if (!user) {
+      throw new UnauthorizedException(AuthErrorCode.EMAIL_DOES_NOT_EXIST);
+    }
+
+    return user;
   }
 }
