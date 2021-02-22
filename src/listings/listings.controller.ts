@@ -15,8 +15,9 @@ import { diskStorage } from 'multer';
 import { editFileName } from '../helpers/edit-filename.helper';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from '../auth/get-user.decorator';
-import { User } from '../auth/user.entity';
 import { ApiBearerAuth, ApiOperation, ApiOkResponse } from '@nestjs/swagger';
+import { GetUserInterface } from 'src/auth/interfaces/get-user.interface';
+import { IListing } from './interfaces/listing.interface';
 
 @UseGuards(AuthGuard())
 @Controller('listings')
@@ -27,7 +28,7 @@ export class ListingsController {
   @Get()
   @ApiOperation({ summary: 'Get all user listings' })
   @ApiOkResponse({ type: Object, isArray: true })
-  async getAllListings(@GetUser() user: User) {
+  async getAllListings(@GetUser() user: GetUserInterface): Promise<IListing[]> {
     return this.listingsService.getAllListings(user);
   }
 
@@ -44,8 +45,8 @@ export class ListingsController {
   async createListing(
     @Body(ValidationPipe) createListingDto: CreateListingDto,
     @UploadedFiles() images: any[],
-    @GetUser() user: User,
-  ) {
+    @GetUser() user: GetUserInterface,
+  ): Promise<IListing> {
     return this.listingsService.createListing(createListingDto, images, user);
   }
 }

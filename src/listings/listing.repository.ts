@@ -1,7 +1,5 @@
 import { InternalServerErrorException } from '@nestjs/common';
-import { User } from '../auth/user.entity';
 import { EntityRepository, Repository } from 'typeorm';
-import { CreateListingDto } from './dto/create-listing.dto';
 import { ListingFilterDto } from './dto/get-listings-filter.dto';
 import { Listing } from './listing.entity';
 
@@ -80,52 +78,6 @@ export class ListingRepository extends Repository<Listing> {
 
       const listings = await query.getMany();
       return listings;
-    } catch (error) {
-      throw new InternalServerErrorException();
-    }
-  }
-
-  async getAllListings(user: User) {
-    try {
-      const ownerId = user.id;
-      const listings = await this.find({
-        where: { ownerId },
-      });
-      return listings;
-    } catch (error) {
-      throw new InternalServerErrorException();
-    }
-  }
-
-  async createListing(
-    createListingDto: CreateListingDto,
-    images: any[],
-    user: User,
-  ) {
-    try {
-      const {
-        surfaceArea,
-        bathrooms,
-        bedrooms,
-        destinationId,
-      } = createListingDto;
-
-      const listing = this.create({
-        ...createListingDto,
-        surfaceArea: parseInt(surfaceArea),
-        bathrooms: parseInt(bathrooms),
-        bedrooms: parseInt(bedrooms),
-        destinationId: parseInt(destinationId),
-        ownerId: user.id,
-      });
-
-      if (images && images.length > 0) {
-        const imagesUrls = images.map((val) => val.filename);
-        listing.images = imagesUrls;
-      }
-
-      await listing.save();
-      return listing;
     } catch (error) {
       throw new InternalServerErrorException();
     }
